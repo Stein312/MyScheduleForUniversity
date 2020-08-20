@@ -19,7 +19,7 @@ import java.io.FileInputStream
 import java.io.InputStream
 import java.util.*
 
-class EventListDemoFragment : BaseFragment() {
+class EventListDemoFragment : BaseFragment(){
 
     override val layoutRes: Int
         get() = R.layout.fragment_calendar
