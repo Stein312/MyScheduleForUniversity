@@ -10,7 +10,9 @@ import retrofit2.http.Path
 
 interface ServerApi {
     @GET("myserver/getAll")
-    suspend fun getAllAsync():Response<List<Lesson>>
+    suspend fun getAllAsync():List<Lesson>
+    @GET("myserver/getGroupList")
+    suspend fun getGroupList():List<String>
     @GET("myserver/getAll")
     fun getAll():Call<List<Lesson>>
     @GET("myserver/get/{id}")

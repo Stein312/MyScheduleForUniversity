@@ -4,18 +4,19 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.BaseFragment
 import com.example.myapplication.R
-import com.example.myapplication.Schedule.Predmet
 import com.example.myapplication.Schedule.Schedule
+import com.example.myapplication.network.ScheduleRepository
 import kotlinx.android.synthetic.main.fragment_calendar.*
+import kotlinx.coroutines.launch
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import ru.cleverpumpkin.calendar.CalendarDate
 import ru.cleverpumpkin.calendar.CalendarView
 import ru.cleverpumpkin.calendar.extension.getColorInt
 import java.io.InputStream
 import java.util.*
-import kotlin.collections.ArrayList
 
 class EventTeacherListFragment : BaseFragment() {
 
@@ -30,8 +31,8 @@ class EventTeacherListFragment : BaseFragment() {
             setNavigationIcon(R.drawable.ic_arrow_back_24dp)
             setNavigationOnClickListener { activity?.onBackPressed() }
         }
-
-        calendarView.datesIndicators = generateEventItems()
+        lifecycleScope.launch {
+        calendarView.datesIndicators = generateEventItems()}
 
         calendarView.onDateClickListener = { date ->
             showDialogWithEventsForSpecificDate(date)
@@ -71,22 +72,23 @@ class EventTeacherListFragment : BaseFragment() {
 
     }
 
-    private fun generateEventItems(): List<EventTeacherItem> {
-
-        val input: InputStream =activity!!.assets.open ("AssetsSchedule/FPMiI.xlsx")
-        val xlWb= XSSFWorkbook(input)
-        val rasp= Schedule(xlWb)
+    suspend fun generateEventItems(): List<EventTeacherItem> {
+        var rasp: Schedule? =null
+        val schedule= Schedule(
+            ScheduleRepository().getAllLesson(),
+            ScheduleRepository().getGroupList())
+            rasp =schedule
         val calendar: Calendar = GregorianCalendar(2020, Calendar.JANUARY,21)
         val context = requireContext()
         val eventTeacherItems = mutableListOf<EventTeacherItem>()
 
         repeat(300) {
-            val arr =rasp.getShedlIsDateToTecher("Истомин В.В.",calendar.time)
+            val arr =rasp.getShedlIsDatetoTeacher("Истомин В.В.",calendar.time)
             if(arr.size!=0) {
                 eventTeacherItems += EventTeacherItem(
-                    eventName = arr[0].name,
+                    eventName = arr[0].title,
                     date = CalendarDate(calendar.time),
-                    color = if (arr[0].name == "") context.getColorInt(R.color.event_0_color)
+                    color = if (arr[0].title == "") context.getColorInt(R.color.event_0_color)
                     else context.getColorInt(R.color.event_1_color),
                     time = arr[0].time,
                     cabinet = arr[0].cabinet,
@@ -94,9 +96,9 @@ class EventTeacherListFragment : BaseFragment() {
                 )
 
                 eventTeacherItems += EventTeacherItem(
-                    eventName = arr[1].name,
+                    eventName = arr[1].title,
                     date = CalendarDate(calendar.time),
-                    color = if (arr[1].name == "") context.getColorInt(R.color.event_0_color)
+                    color = if (arr[1].title == "") context.getColorInt(R.color.event_0_color)
                     else context.getColorInt(R.color.event_2_color),
                     time = arr[1].time,
                     cabinet = arr[1].cabinet,
@@ -104,9 +106,9 @@ class EventTeacherListFragment : BaseFragment() {
                 )
 
                 eventTeacherItems += EventTeacherItem(
-                    eventName = arr[2].name,
+                    eventName = arr[2].title,
                     date = CalendarDate(calendar.time),
-                    color = if (arr[2].name == "" && arr[4].name == "") context.getColorInt(R.color.event_0_color)
+                    color = if (arr[2].title == "" && arr[4].title == "") context.getColorInt(R.color.event_0_color)
                     else context.getColorInt(R.color.event_3_color),
                     time = arr[2].time,
                     cabinet = arr[2].cabinet,
@@ -114,9 +116,9 @@ class EventTeacherListFragment : BaseFragment() {
                 )
 
                 eventTeacherItems += EventTeacherItem(
-                    eventName = arr[3].name,
+                    eventName = arr[3].title,
                     date = CalendarDate(calendar.time),
-                    color = if (arr[3].name == "" && arr[5].name == "" && arr[6].name == "") context.getColorInt(
+                    color = if (arr[3].title == "" && arr[5].title == "" && arr[6].title == "") context.getColorInt(
                         R.color.event_0_color
                     )
                     else context.getColorInt(R.color.event_4_color),
@@ -126,16 +128,16 @@ class EventTeacherListFragment : BaseFragment() {
                 )
 
                 eventTeacherItems += EventTeacherItem(
-                    eventName = arr[4].name,
+                    eventName = arr[4].title,
                     date = CalendarDate(calendar.time),
-                    color = if (arr[4].name == "") context.getColorInt(R.color.event_0_color)
+                    color = if (arr[4].title == "") context.getColorInt(R.color.event_0_color)
                     else context.getColorInt(R.color.event_5_color),
                     time = arr[4].time,
                     cabinet = arr[4].cabinet,
                     techer = arr[4].nameTch
                 )
                 eventTeacherItems += EventTeacherItem(
-                    eventName = arr[5].name,
+                    eventName = arr[5].title,
                     date = CalendarDate(calendar.time),
                     color = context.getColorInt(R.color.event_5_color),
                     time = arr[5].time,
@@ -143,7 +145,7 @@ class EventTeacherListFragment : BaseFragment() {
                     techer = arr[5].nameTch
                 )
                 eventTeacherItems += EventTeacherItem(
-                    eventName = arr[6].name,
+                    eventName = arr[6].title,
                     date = CalendarDate(calendar.time),
                     color = context.getColorInt(R.color.event_5_color),
                     time = arr[6].time,

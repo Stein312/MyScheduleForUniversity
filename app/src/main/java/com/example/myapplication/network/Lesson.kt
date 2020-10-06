@@ -1,5 +1,7 @@
 package com.example.myapplication.network
 
+import java.util.*
+
 data class Lesson(
     val title: String,       //название
     val date: String, //дата
