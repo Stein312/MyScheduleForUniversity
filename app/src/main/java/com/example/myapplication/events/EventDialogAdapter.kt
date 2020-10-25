@@ -20,10 +20,9 @@ class EventDialogAdapter(
         val eventItem = getItem(position)
 
         if (eventItem != null) {
+
             view.findViewById<TextView>(R.id.eventTimeView).text=eventItem.time
-            view.findViewById<TextView>(R.id.eventNameView).text = eventItem.eventName
-
-
+            view.findViewById<TextView>(R.id.titleGroup).text = eventItem.eventName
 
         }
 

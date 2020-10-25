@@ -1,19 +1,42 @@
 package com.example.myapplication.network
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.lang.RuntimeException
 
 class ScheduleRepository {
+
     suspend fun getAllLesson():List<Lesson>{
-        return Networking.serverApi.getAllAsync()
+        return Networking.serverApi.getAllCoroutin()
     }
-    suspend fun getGroupList():List<String>{
-        return Networking.serverApi.getGroupList()
+    suspend fun getFaculty(faculty:String):List<Lesson>{
+        return Networking.serverApi.getFaculty(faculty)
+    }
+
+    fun getGroupList(
+        onComplete:(List<TitleGroup>)->Unit,
+        onError: (Throwable) -> Unit){
+            Networking.serverApi.getGroupList().enqueue(
+                object:Callback<List<TitleGroup>>{
+                    override fun onFailure(call: Call<List<TitleGroup>>, t: Throwable) {
+                        onError(t)
+                    }
+
+                    override fun onResponse(
+                        call: Call<List<TitleGroup>>,
+                        response: Response<List<TitleGroup>>
+                    ) {
+                        if(response.isSuccessful){
+                            onComplete(response.body().orEmpty())
+                        }
+                        else{
+                            onError(RuntimeException("incorrect status code"))
+                        }
+                    }
+
+                }
+            )
     }
     fun getAllLess(
         onComplete:(List<Lesson>)->Unit,

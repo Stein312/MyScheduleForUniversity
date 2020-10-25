@@ -8,7 +8,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ServerBuilder {
    companion object{ private var mInstance: ServerBuilder? = null
 
-
        fun getInstance(): ServerBuilder? {
            if (mInstance == null) {
                mInstance = ServerBuilder()
@@ -27,7 +26,7 @@ class ServerBuilder {
 
 
     fun getApi():ServerApi{
-        return retrofit.create(ServerApi::class.java)!!
+        return retrofit.create(ServerApi::class.java)
     }
 
 }

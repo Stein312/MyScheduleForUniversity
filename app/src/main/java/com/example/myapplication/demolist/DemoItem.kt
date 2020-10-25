@@ -4,9 +4,12 @@ import androidx.annotation.StringRes
 import com.example.myapplication.R
 
 enum class DemoItem(@StringRes val titleRes: Int) {
-    SELECTION(titleRes = R.string.demo_selection),
-    DATE_BOUNDARIES(titleRes = R.string.demo_date_boundaries),
-    STYLING(titleRes = R.string.demo_styling),
-    EVENTS(titleRes = R.string.demo_events),
+    SOCIOLOGY_AND_JOURNALISM(titleRes = R.string.faculty_sociology_and_journalism),
+    FACULTY_OF_LAW(titleRes = R.string.faculty_of_law),
+    FACULTY_OF_ECONOMICS(titleRes = R.string.faculty_of_economics),
+    COMPUTER_SCIENCE_AND_MATH(titleRes = R.string.faculty_of_computer_science_and_mathematics),
+    FOREIGN_LANGUAGE(titleRes = R.string.foreign_language),
+    PSYCHOLOGY_AND_PEDAGOGY(titleRes = R.string.faculty_of_psychology_and_pedagogy)
+
 
 }

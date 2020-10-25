@@ -24,7 +24,7 @@ class DateBoundariesDemoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(toolbarView) {
-            setTitle(R.string.demo_date_boundaries)
+            setTitle(R.string.faculty_of_law)
             setNavigationIcon(R.drawable.ic_arrow_back_24dp)
             setNavigationOnClickListener { activity?.onBackPressed() }
         }

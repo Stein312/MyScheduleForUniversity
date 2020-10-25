@@ -9,6 +9,6 @@ override val color: Int,
 val time:String,
 val eventName: String,
 val cabinet:String,
-val techer:String
+val teacher:String
 
 ) : CalendarView.DateIndicator

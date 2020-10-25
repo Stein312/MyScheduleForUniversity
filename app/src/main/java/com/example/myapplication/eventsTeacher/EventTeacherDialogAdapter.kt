@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.myapplication.R
-import com.example.myapplication.events.EventItem
 
 class EventTeacherDialogAdapter(
     context: Context,
@@ -22,7 +21,7 @@ class EventTeacherDialogAdapter(
 
         if (eventItem != null) {
             view.findViewById<TextView>(R.id.eventTimeView).text=eventItem.time
-            view.findViewById<TextView>(R.id.eventNameView).text = eventItem.eventName
+            view.findViewById<TextView>(R.id.titleGroup).text = eventItem.eventName
         }
 
         return view

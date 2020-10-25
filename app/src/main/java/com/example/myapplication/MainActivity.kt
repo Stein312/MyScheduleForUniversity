@@ -1,39 +1,27 @@
 package com.example.myapplication
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
-import com.example.myapplication.customstyle.CodeStylingDemoFragment
-import com.example.myapplication.dateboundaries.DateBoundariesDemoFragment
 import com.example.myapplication.demolist.DemoItem
 import com.example.myapplication.demolist.DemoListFragment
-
-import com.example.myapplication.events.EventListDemoFragment
-import com.example.myapplication.eventsTeacher.EventTeacherListFragment
+import com.example.myapplication.events.EventListLessonFragment
 import com.example.myapplication.network.ScheduleRepository
-import com.example.myapplication.network.ScheduleViewModel
-import kotlinx.android.synthetic.main.fragment_calendar.*
-import kotlinx.coroutines.launch
-import ru.cleverpumpkin.calendar.CalendarView
 
 
 class MainActivity : AppCompatActivity(), DemoListFragment.OnDemoItemSelectionListener {
-    val repository=ScheduleRepository()
+    val repository = ScheduleRepository()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        repository.getAllLess(
-            onComplete = {lessons->
-                ListSchedule.lessons.addAll(lessons)
-                Log.d("Observer","Date to server")
+
+        repository.getGroupList(
+            onComplete = { titleGroup ->
+                ListSchedule.titleGroup.addAll(titleGroup)
             },
             onError = {
-                Log.d("Observer","${it.message}")
-                Log.d("Observer","NO date to server")
+                Log.d("Observer", "${it.message}")
+                Log.d("Observer", "NO date to server")
             }
         )
         setContentView(R.layout.activity_main)
@@ -44,21 +32,44 @@ class MainActivity : AppCompatActivity(), DemoListFragment.OnDemoItemSelectionLi
         }
 
     }
+
     override fun onDemoItemSelected(demoItem: DemoItem) {
         val demoFragment = when (demoItem) {
-            DemoItem.SELECTION -> EventTeacherListFragment()
-            DemoItem.DATE_BOUNDARIES -> DateBoundariesDemoFragment()
-            DemoItem.STYLING -> CodeStylingDemoFragment()
-            DemoItem.EVENTS -> EventListDemoFragment()
+            DemoItem.SOCIOLOGY_AND_JOURNALISM -> {
+                ListSchedule.faculty= getString(R.string.faculty_sociology_and_journalism)
+
+                EventListLessonFragment()
+            }
+            DemoItem.FACULTY_OF_LAW -> {
+                ListSchedule.faculty= getString(R.string.faculty_of_law)
+
+                EventListLessonFragment()
+            }
+            DemoItem.FACULTY_OF_ECONOMICS -> {
+                ListSchedule.faculty= getString(R.string.faculty_of_economics)
+
+                EventListLessonFragment()
+            }
+            DemoItem.COMPUTER_SCIENCE_AND_MATH ->{
+                ListSchedule.faculty= getString(R.string.faculty_of_computer_science_and_mathematics)
+
+                EventListLessonFragment()
+            }
+            DemoItem.FOREIGN_LANGUAGE->{
+                ListSchedule.faculty= getString(R.string.foreign_language)
+                EventListLessonFragment()
+            }
+            DemoItem.PSYCHOLOGY_AND_PEDAGOGY->{
+                ListSchedule.faculty= getString(R.string.faculty_of_psychology_and_pedagogy)
+                EventListLessonFragment()
+            }
 
         }
-
-
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.fragmentContainer, demoFragment)
-                .addToBackStack(null)
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, demoFragment)
+            .addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .commit()
 
     }
 }

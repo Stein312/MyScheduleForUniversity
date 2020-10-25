@@ -10,41 +10,38 @@ import kotlinx.coroutines.launch
 class ScheduleViewModel : ViewModel() {
     private val repository = ScheduleRepository()
 
-    private val lessonListLiveData = mutableListOf<Lesson>()
-    private val isLoadingLiveData = MutableLiveData<Boolean>()
-    val lessonList: List<Lesson>
+    private val lessonListLiveData = MutableLiveData<List<Lesson>>()
+    private val facultyListLiveData = MutableLiveData<List<Lesson>>()
+    //private val isLoadingLiveData = MutableLiveData<Boolean>()
+    val liveDataLessons: LiveData<List<Lesson>>
         get() = lessonListLiveData
-    val isLoading: LiveData<Boolean>
-        get() = isLoadingLiveData
-    lateinit var isJob: Job
+    val liveDataFacultyLesson: LiveData<List<Lesson>>
+        get() = facultyListLiveData
+    /*val isLoading: LiveData<Boolean>
+        get() = isLoadingLiveData*/
 
-    fun getSchedule() {
-        isLoadingLiveData.postValue(true)
-        repository.getAllLess(
-            onComplete = {lessons->
-                isLoadingLiveData.postValue(false)
-                lessonListLiveData.addAll(lessons)
-            },
-            onError = {
-                isLoadingLiveData.postValue(false)
-                lessonListLiveData.addAll(emptyList())
-            }
-        )
-        /*isJob=viewModelScope.launch {
-            isLoadingLiveData.postValue(true)
+    fun getLessons() {
+       // isLoadingLiveData.postValue(true)
+        viewModelScope.launch {
             try {
-                val lessons = repository.getAllLesson()
-                Log.d("ScheduleViewModel","${lessons.isEmpty()}")
+                val lessons= repository.getAllLesson()
                 lessonListLiveData.postValue(lessons)
-
-            } catch (t: Throwable) {
+            }catch (t:Throwable){
                 lessonListLiveData.postValue(emptyList())
-            } finally {
-                isLoadingLiveData.postValue(false)
             }
-        }*/
+        }
 
-
+    }
+    fun getLessonFaculty(faculty:String) {
+        // isLoadingLiveData.postValue(true)
+        viewModelScope.launch {
+            try {
+                val lessons= repository.getFaculty(faculty)
+                facultyListLiveData.postValue(lessons)
+            }catch (t:Throwable){
+                facultyListLiveData.postValue(emptyList())
+            }
+        }
 
     }
 

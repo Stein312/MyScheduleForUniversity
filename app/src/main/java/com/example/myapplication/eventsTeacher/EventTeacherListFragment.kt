@@ -6,16 +6,15 @@ import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.example.myapplication.BaseFragment
+import com.example.myapplication.ListSchedule
 import com.example.myapplication.R
 import com.example.myapplication.Schedule.Schedule
 import com.example.myapplication.network.ScheduleRepository
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.coroutines.launch
-import org.apache.poi.xssf.usermodel.XSSFWorkbook
 import ru.cleverpumpkin.calendar.CalendarDate
 import ru.cleverpumpkin.calendar.CalendarView
 import ru.cleverpumpkin.calendar.extension.getColorInt
-import java.io.InputStream
 import java.util.*
 
 class EventTeacherListFragment : BaseFragment() {
@@ -27,7 +26,7 @@ class EventTeacherListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(toolbarView) {
-            setTitle(R.string.demo_events)
+            setTitle(R.string.faculty_of_computer_science_and_mathematics)
             setNavigationIcon(R.drawable.ic_arrow_back_24dp)
             setNavigationOnClickListener { activity?.onBackPressed() }
         }
@@ -55,9 +54,9 @@ class EventTeacherListFragment : BaseFragment() {
             val myDialogClickListener= DialogInterface.OnClickListener{
                     _, which ->
                 val builder2= AlertDialog.Builder(requireContext())
-                    .setTitle("${eventTeacherItems[which].eventName}")
+                    .setTitle(eventTeacherItems[which].eventName)
                     .setMessage("""Кабинет: ${eventTeacherItems[which].cabinet} 
-                        |Преподователь:${eventTeacherItems[which].techer}""".trimMargin())
+                        |Преподователь:${eventTeacherItems[which].teacher}""".trimMargin())
                 val dialog2=builder2.create()
                 dialog2.show()
             }
@@ -73,11 +72,11 @@ class EventTeacherListFragment : BaseFragment() {
     }
 
     suspend fun generateEventItems(): List<EventTeacherItem> {
-        var rasp: Schedule? =null
+
         val schedule= Schedule(
             ScheduleRepository().getAllLesson(),
-            ScheduleRepository().getGroupList())
-            rasp =schedule
+            ListSchedule.titleGroup)
+        val rasp =schedule
         val calendar: Calendar = GregorianCalendar(2020, Calendar.JANUARY,21)
         val context = requireContext()
         val eventTeacherItems = mutableListOf<EventTeacherItem>()
@@ -92,7 +91,7 @@ class EventTeacherListFragment : BaseFragment() {
                     else context.getColorInt(R.color.event_1_color),
                     time = arr[0].time,
                     cabinet = arr[0].cabinet,
-                    techer = arr[0].nameTch
+                    teacher = arr[0].nameTch
                 )
 
                 eventTeacherItems += EventTeacherItem(
@@ -102,7 +101,7 @@ class EventTeacherListFragment : BaseFragment() {
                     else context.getColorInt(R.color.event_2_color),
                     time = arr[1].time,
                     cabinet = arr[1].cabinet,
-                    techer = arr[1].nameTch
+                    teacher = arr[1].nameTch
                 )
 
                 eventTeacherItems += EventTeacherItem(
@@ -112,7 +111,7 @@ class EventTeacherListFragment : BaseFragment() {
                     else context.getColorInt(R.color.event_3_color),
                     time = arr[2].time,
                     cabinet = arr[2].cabinet,
-                    techer = arr[2].nameTch
+                    teacher = arr[2].nameTch
                 )
 
                 eventTeacherItems += EventTeacherItem(
@@ -124,7 +123,7 @@ class EventTeacherListFragment : BaseFragment() {
                     else context.getColorInt(R.color.event_4_color),
                     time = arr[3].time,
                     cabinet = arr[3].cabinet,
-                    techer = arr[3].nameTch
+                    teacher = arr[3].nameTch
                 )
 
                 eventTeacherItems += EventTeacherItem(
@@ -134,7 +133,7 @@ class EventTeacherListFragment : BaseFragment() {
                     else context.getColorInt(R.color.event_5_color),
                     time = arr[4].time,
                     cabinet = arr[4].cabinet,
-                    techer = arr[4].nameTch
+                    teacher = arr[4].nameTch
                 )
                 eventTeacherItems += EventTeacherItem(
                     eventName = arr[5].title,
@@ -142,7 +141,7 @@ class EventTeacherListFragment : BaseFragment() {
                     color = context.getColorInt(R.color.event_5_color),
                     time = arr[5].time,
                     cabinet = arr[5].cabinet,
-                    techer = arr[5].nameTch
+                    teacher = arr[5].nameTch
                 )
                 eventTeacherItems += EventTeacherItem(
                     eventName = arr[6].title,
@@ -150,7 +149,7 @@ class EventTeacherListFragment : BaseFragment() {
                     color = context.getColorInt(R.color.event_5_color),
                     time = arr[6].time,
                     cabinet = arr[6].cabinet,
-                    techer = arr[6].nameTch
+                    teacher = arr[6].nameTch
                 )
             }
 

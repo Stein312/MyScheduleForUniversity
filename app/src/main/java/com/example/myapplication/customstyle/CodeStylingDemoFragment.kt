@@ -16,7 +16,7 @@ class CodeStylingDemoFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         with(toolbarView) {
-            setTitle(R.string.demo_styling)
+            setTitle(R.string.faculty_of_economics)
             setNavigationIcon(R.drawable.ic_arrow_back_24dp)
             setNavigationOnClickListener { activity?.onBackPressed() }
         }

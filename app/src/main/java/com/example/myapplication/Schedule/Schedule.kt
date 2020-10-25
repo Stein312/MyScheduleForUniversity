@@ -2,13 +2,14 @@ package com.example.myapplication.Schedule
 
 
 import com.example.myapplication.network.Lesson
-import org.apache.poi.ss.usermodel.Sheet
+import com.example.myapplication.network.TitleGroup
+
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class Schedule(list:List<Lesson>,listGroup:List<String>) {
+class Schedule(list:List<Lesson>,listGroup:List<TitleGroup>) {
 
         var listAllLesson = list //Массив со всеми предметами
 
@@ -19,9 +20,9 @@ class Schedule(list:List<Lesson>,listGroup:List<String>) {
         listGroup.forEach { group->
             val listLesson=ArrayList<Lesson>()
         listAllLesson.forEach {
-            if(it.group==group)
+            if(it.group==group.title)
                 listLesson.add(it)}
-            hashPredmet[group]=listLesson
+            hashPredmet[group.title]=listLesson
         }
     }
     fun getShedlIsDate(group: String, date: Date):ArrayList<Lesson> {
@@ -40,7 +41,7 @@ class Schedule(list:List<Lesson>,listGroup:List<String>) {
         val format="dd.MM"
         val dateFormat= SimpleDateFormat(format)
         val stringDate:String=dateFormat.format(date)
-        getShedlIsTecher(teacher)?.forEach {
+        getShedlIsTecher(teacher).forEach {
             if (it.date== stringDate)
                 newlist.add(it)
         }
